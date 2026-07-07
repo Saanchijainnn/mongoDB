@@ -1,35 +1,17 @@
 const express = require('express');
 const app = express();
-const userModel=require('./usermodel');
+const path = require('path');
+
+app.set("view engine","ejs");
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use(express.static(path.join(__dirname,'public')));
 
 app.get('/', (req, res) => {
-  res.send('Hello, World!');
+  res.render('index');
 } );
-
-app.get('/create', async (req, res) => {
- let createduser= await userModel.create({
-    name : "saanchiya",
-    email: "saanchi23156@gmail.com",
-    username :"suhani234"
-  })
-
-  res.send(createduser)
+app.get('/read', (req, res) => {
+  res.render('read');
 } );
-
-app.get('/update', async (req, res) => {
- let updateduser= await userModel.findOneAndUpdate({username:"suhani23"},{name:"saanchi"},{new:true})
-    
-  res.send(updateduser)
-} );
-
-app.get('/read',async (req,res)=>{
-let users= await userModel.find();
-res.send(users);
-})
-
-app.get("/delete", async (req, res) => {
-    let users = await userModel.findOneAndDelete({username: "suhani234"})
-    res.send(users);
-})
 
 app.listen(3000)
